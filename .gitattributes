@@ -1,0 +1,6 @@
+﻿# Единые переводы строк: на macOS-раннере CRLF в .yml ломает шаги workflow
+* text=auto
+*.yml text eol=lf
+*.sh  text eol=lf
+*.swift text eol=lf
+*.py  text eol=lf
