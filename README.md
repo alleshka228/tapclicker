@@ -143,6 +143,29 @@ python scripts/make_icon.py   # нужен Pillow
 - **`xcodebuild` падает на CI** — открой лог шага *Archive*, чаще всего это опечатка в Swift-коде; проект собирается с `CODE_SIGNING_ALLOWED=NO`, так что сертификаты тут ни при чём.
 - **Приложение открывается не на весь экран** — в `Info.plist` должен остаться `UILaunchScreen`.
 
+## Проверено на практике (Windows + GitHub Actions)
+
+Проект собран и установлен по этой схеме. Что выяснилось по ходу — чтобы не наступать второй раз:
+
+1. **`macos-latest` может стоять в очереди бесконечно.** У свежего аккаунта задания на `macos-latest` висели 30+ минут без раннера, при этом `ubuntu-latest` и `macos-14` запускались за секунды. Поэтому в workflow зафиксирован `runs-on: macos-14`.
+2. **XcodeGen по умолчанию пишет формат Xcode 16 (`objectVersion 77`)**, а на `macos-14` стоит Xcode 15.4 → `xcodebuild: error: ... future Xcode project file format (77)`. Лечится в `project.yml`: `projectFormat: xcode15_3` и `xcodeVersion: "15.4"`.
+3. **Bundle ID должен совпадать с профилем.** Если профиль выдан на конкретный App ID (`24KV5ZJX6G.app.libra9119.dragonfruit5889`), сборка с `com.example.tapclicker` установится с ошибкой. В проекте уже прописан нужный ID, а workflow принимает его же через `-f bundle_id=...`.
+4. **zsign в Windows падает с `Unzip failed!`**, если системный `%TEMP%` недоступен на запись. Решение — подставить свой временный каталог: `$env:TMP = "$PWD\build\tmp"` перед запуском.
+5. Установка через `pymobiledevice3` на iOS 17 работает без режима разработчика: `pymobiledevice3 apps install TapClicker-signed.ipa` → `Installation succeed`.
+
+Команды подписи и установки целиком:
+
+```powershell
+# подпись
+.\tools\zsign\zsign.exe -k cert.p12 -p <пароль> -m profile.mobileprovision -o TapClicker-signed.ipa TapClicker-unsigned.ipa
+
+# установка на подключённый iPhone
+python -m pymobiledevice3 apps install TapClicker-signed.ipa
+
+# что установилось
+python -m pymobiledevice3 apps list
+```
+
 ## Лицензия
 
 Делай что хочешь, только не выкладывай в App Store под чужим именем.
