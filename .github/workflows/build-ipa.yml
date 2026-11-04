@@ -9,7 +9,7 @@ on:
       bundle_id:
         description: "Bundle ID (должен совпадать с профилем подписи)"
         required: false
-        default: "com.example.tapclicker"
+        default: "app.libra9119.dragonfruit5889"
 
 env:
   SCHEME: TapClicker
@@ -37,7 +37,7 @@ jobs:
 
       - name: Archive (unsigned)
         env:
-          BUNDLE_ID: ${{ github.event.inputs.bundle_id || 'com.example.tapclicker' }}
+          BUNDLE_ID: ${{ github.event.inputs.bundle_id || 'app.libra9119.dragonfruit5889' }}
         run: |
           set -o pipefail
           xcodebuild \
