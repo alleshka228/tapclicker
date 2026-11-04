@@ -1,0 +1,26 @@
+# Xcode
+build/
+DerivedData/
+*.xcarchive
+*.xcuserstate
+xcuserdata/
+TapClicker.xcodeproj/
+TapClicker.xcworkspace/
+
+# Артефакты сборки
+*.ipa
+*.dSYM.zip
+Payload/
+
+# Подпись — никогда не коммитим
+*.p12
+*.mobileprovision
+*.cer
+*.key
+
+# Прочее
+.DS_Store
+__pycache__/
+*.pyc
+.tmp/
+.tools/
