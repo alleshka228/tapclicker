@@ -4,6 +4,8 @@ options:
   bundleIdPrefix: com.example
   deploymentTarget:
     iOS: "16.0"
+  xcodeVersion: "15.4"
+  projectFormat: xcode15_3
   createIntermediateGroups: true
   groupSortPosition: top
   generateEmptyDirectories: true
